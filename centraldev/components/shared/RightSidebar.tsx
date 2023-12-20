@@ -4,27 +4,27 @@ import Image from "next/image";
 import RenderTags from "./Tags";
 const RightSidebar = () => {
   const hotQuestions = [
-    { _id: 1, title: "How do I use express as a custom server in NextJS?" },
-    { _id: 2, title: "How do I get a job in software engineering today?" },
-    { _id: 3, title: "How hard is it to learn IOS development?" },
+    { _id: "1", title: "How do I use express as a custom server in NextJS?" },
+    { _id: "2", title: "How do I get a job in software engineering today?" },
+    { _id: "3", title: "How hard is it to learn IOS development?" },
     {
-      _id: 4,
+      _id: "4",
       title:
         "Best practices for data fetching in a Next.js application with Server-Side Rendering (SSR)?",
     },
     {
-      _id: 5,
+      _id: "5",
       title:
         "Why is Next.js better than create-react-app currently at the moment?",
     },
   ];
 
   const popularTags = [
-    { _id: 1, name: "javascript", totalQuestions: 5 },
-    { _id: 2, name: "react", totalQuestions: 3 },
-    { _id: 3, name: "next", totalQuestions: 5 },
-    { _id: 4, name: "career", totalQuestions: 2 },
-    { _id: 5, name: "ios", totalQuestions: 10 },
+    { _id: "1", name: "javascript", totalQuestions: 5 },
+    { _id: "2", name: "react", totalQuestions: 3 },
+    { _id: "3", name: "next", totalQuestions: 5 },
+    { _id: "4", name: "career", totalQuestions: 2 },
+    { _id: "5", name: "ios", totalQuestions: 10 },
   ];
   return (
     <section

@@ -4,6 +4,45 @@ import LocalSearchBar from "@/components/shared/search/LocalSearchbar";
 import Filter from "@/components/shared/Filter";
 import { HomePageFilters } from "@/constants/filters";
 import HomeFilters from "@/components/home/HomeFilters";
+import NoResult from "@/components/shared/NoResult";
+import QuestionCard from "@/components/cards/QuestionCard";
+const questions = [
+  {
+    _id: "1",
+    title: "What is the difference between Tailwind CSS and Bootstrap?",
+    tags: [
+      { _id: "1", name: "Tailwind CSS" },
+      { _id: "2", name: "Bootstrap" },
+    ],
+    author: {
+      _id: "a1",
+      name: "John Doe",
+      picture: "https://example.com/picture1.jpg",
+    },
+    upVotes: 234567,
+    answers: [],
+    views: 1234567,
+    createdAt: new Date("2023-12-01T12:00:00.000Z"),
+  },
+  {
+    _id: "2",
+    title: "How to center a div?",
+    tags: [
+      { _id: "3", name: "CSS" },
+      { _id: "4", name: "web development" },
+    ],
+    author: {
+      _id: "a2",
+      name: "Jane Doe",
+      picture: "https://example.com/picture2.jpg",
+    },
+    upVotes: 5678,
+    answers: [],
+    views: 234567,
+    createdAt: new Date("2022-12-01T12:00:00.000Z"),
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -32,6 +71,31 @@ export default function Home() {
         />
       </div>
       <HomeFilters />
+
+      <div className="mt-10 flex w-full flex-col gap-6">
+        {questions.length > 0 ? (
+          questions.map((question) => (
+            <QuestionCard
+              key={question._id}
+              _id={question._id}
+              title={question.title}
+              tags={question.tags}
+              author={question.author}
+              upVotes={question.upVotes}
+              answers={question.answers}
+              views={question.views}
+              createdAt={question.createdAt}
+            />
+          ))
+        ) : (
+          <NoResult
+            title=" There's no question to show"
+            description="Take the first step to ask question and breaking the silence! 🚀 Ask a question and start off the discussion. Our query could be the next big thing others could learn from. Get involved now! 💡"
+            link="/ask-question"
+            linkTitle="Ask a Question"
+          />
+        )}
+      </div>
     </>
   );
 }
