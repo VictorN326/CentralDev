@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { createQuestion } from "@/lib/actions/question.action";
 
 const typeOfForm: any = "create";
 const Question = () => {
@@ -37,13 +38,16 @@ const Question = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof QuestionSchema>) {
+  async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     //added this to prevent submitting the form multiple times and chaos in database
     setIsSubmitting(true);
 
     try {
       // make an async call to API or database to create question
+
+      await createQuestion({});
     } catch (error) {
+      console.log("DEBUG: Error creating question", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -126,6 +130,8 @@ const Question = () => {
                     // @ts-ignore
                     editorRef.current = editor;
                   }}
+                  onBlur={field.onBlur}
+                  onEditorChange={(content) => field.onChange(content)}
                   initialValue=""
                   init={{
                     height: 350,
