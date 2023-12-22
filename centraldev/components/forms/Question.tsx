@@ -8,6 +8,7 @@ import * as z from "zod";
 import { QuestionSchema } from "@/lib/validations";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -22,10 +23,16 @@ import { useState } from "react";
 import { createQuestion } from "@/lib/actions/question.action";
 
 const typeOfForm: any = "create";
-const Question = () => {
+
+interface Props {
+  mongodbUserId: string;
+}
+const Question = ({ mongodbUserId }: Props) => {
   const editorRef = useRef(null);
   //handle submit for multiple submissions of the form
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof QuestionSchema>>({
@@ -44,8 +51,14 @@ const Question = () => {
 
     try {
       // make an async call to API or database to create question
-
-      await createQuestion({});
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: JSON.parse(mongodbUserId),
+        path: pathname,
+      });
+      router.push("/");
     } catch (error) {
       console.log("DEBUG: Error creating question", error);
     } finally {

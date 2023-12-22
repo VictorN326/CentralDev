@@ -6,44 +6,12 @@ import { HomePageFilters } from "@/constants/filters";
 import HomeFilters from "@/components/home/HomeFilters";
 import NoResult from "@/components/shared/NoResult";
 import QuestionCard from "@/components/cards/QuestionCard";
-const questions = [
-  {
-    _id: "1",
-    title: "What is the difference between Tailwind CSS and Bootstrap?",
-    tags: [
-      { _id: "1", name: "Tailwind CSS" },
-      { _id: "2", name: "Bootstrap" },
-    ],
-    author: {
-      _id: "a1",
-      name: "John Doe",
-      picture: "https://example.com/picture1.jpg",
-    },
-    upVotes: 234567,
-    answers: [],
-    views: 1234567,
-    createdAt: new Date("2023-12-01T12:00:00.000Z"),
-  },
-  {
-    _id: "2",
-    title: "How to center a div?",
-    tags: [
-      { _id: "3", name: "CSS" },
-      { _id: "4", name: "web development" },
-    ],
-    author: {
-      _id: "a2",
-      name: "Jane Doe",
-      picture: "https://example.com/picture2.jpg",
-    },
-    upVotes: 5678,
-    answers: [],
-    views: 234567,
-    createdAt: new Date("2022-12-01T12:00:00.000Z"),
-  },
-];
+import { getQuestions } from "@/lib/actions/question.action";
 
-export default function Home() {
+export default async function Home() {
+  const result = await getQuestions({});
+
+  console.log("DEBUG: result: ", result?.questions);
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -73,8 +41,8 @@ export default function Home() {
       <HomeFilters />
 
       <div className="mt-10 flex w-full flex-col gap-6">
-        {questions.length > 0 ? (
-          questions.map((question) => (
+        {result?.questions?.length > 0 ? (
+          result?.questions.map((question) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
