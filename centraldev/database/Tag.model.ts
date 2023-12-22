@@ -16,7 +16,6 @@ const TagSchema = new Schema({
   createdOn: { type: Date, default: Date.now },
 });
 
-// Use existing model if it exists, or define a new one
 const Tag = models.Tag || model("Tag", TagSchema);
 
 export default Tag;
