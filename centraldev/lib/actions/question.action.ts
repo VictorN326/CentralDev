@@ -3,6 +3,7 @@
 import Tag from "@/database/Tag.model";
 import { connectToDatabase } from "../mongoose";
 import Question from "@/database/question.model";
+
 import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
 import User from "@/database/User.model";
 import { revalidatePath } from "next/cache";
@@ -53,7 +54,9 @@ export async function createQuestion(params: CreateQuestionParams) {
     // create a record for the user's ask question action
 
     // Increment author's reputation by +5 for creating a question
+
     revalidatePath(path);
     console.log("DEBUG:PATH", path);
+    return { question };
   } catch (error) {}
 }
