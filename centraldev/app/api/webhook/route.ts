@@ -70,6 +70,14 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ message: "OK", user: mongoDBUser });
   }
+  if (eventType === "user.deleted") {
+    const { id } = evt.data;
+
+    const deletedUser = await deleteUser({
+      clerkId: id!,
+    });
+    return NextResponse.json({ message: "OK", user: deletedUser });
+  }
 
   if (eventType === "user.updated") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
@@ -89,14 +97,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "OK", user: mongoDBUser });
   }
   return new Response("", { status: 200 });
-
-  if (eventType === "user.deleted") {
-    const { id } = evt.data;
-
-    const deletedUser = await deleteUser({
-      clerkId: id!,
-    });
-    return NextResponse.json({ message: "OK", user: deletedUser });
-    return NextResponse.json({ message: "OK" });
-  }
 }
