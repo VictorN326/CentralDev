@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { createQuestion } from "@/lib/actions/question.action";
+import { useTheme } from "@/context/ThemeProvider";
 
 const typeOfForm: any = "create";
 
@@ -28,6 +29,7 @@ interface Props {
   mongodbUserId: string;
 }
 const Question = ({ mongodbUserId }: Props) => {
+  const { mode } = useTheme();
   const editorRef = useRef(null);
   //handle submit for multiple submissions of the form
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -139,6 +141,8 @@ const Question = ({ mongodbUserId }: Props) => {
               <FormControl className="mt-3.5">
                 {/* Our text editor code from TinyMCE */}
                 <Editor
+                  // added this below to fix rendering issue with different modes
+                  key={mode}
                   apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                   onInit={(evt, editor) => {
                     // @ts-ignore
@@ -173,6 +177,8 @@ const Question = ({ mongodbUserId }: Props) => {
                       "codesample | bold italic forecolor | alignleft aligncenter | " +
                       "alignright alignjustify | bullist numlist",
                     content_style: "body { font-family:Inter; font-size:16px }",
+                    skin: mode === "dark" ? "oxide-dark" : "oxide",
+                    content_css: mode === "dark" ? "dark" : "light",
                   }}
                 />
               </FormControl>
