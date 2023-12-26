@@ -4,13 +4,21 @@ import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTags from "@/components/shared/Tags";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-
+import { getUserById } from "@/lib/actions/user.action";
+import AllAnswer from "@/components/shared/AllAnswer";
+import Votes from "@/components/shared/Votes";
 const Page = async ({ params, searchParams }: any) => {
   const result = await getQuestionById({ questionId: params.id });
 
+  const { userId: clerkId } = auth();
+  let mongoDBUser;
+  if (clerkId) {
+    mongoDBUser = await getUserById({ userId: clerkId });
+  }
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -30,7 +38,9 @@ const Page = async ({ params, searchParams }: any) => {
               {result.author.name}
             </p>
           </Link>
-          <div className="flex justify-end">VOTING</div>
+          <div className="flex justify-end">
+            <Votes />
+          </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
           {result.title}
@@ -73,8 +83,16 @@ const Page = async ({ params, searchParams }: any) => {
           />
         ))}
       </div>
-
-      <Answer />
+      <AllAnswer
+        questionId={result._id}
+        userId={JSON.stringify(mongoDBUser._id)}
+        totalAnswers={result.answers.length}
+      />
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoDBUser._id)}
+      />
     </>
   );
 };
