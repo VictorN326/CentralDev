@@ -8,6 +8,7 @@ import {
 } from "@/lib/actions/question.action";
 import { upVoteAnswer, downVoteAnswer } from "@/lib/actions/answer.action";
 import { usePathname, useRouter } from "next/navigation";
+import { toggleSaveQuestion } from "@/lib/actions/user.action";
 interface Props {
   type: string;
   itemId: string;
@@ -29,8 +30,14 @@ const Votes = ({
   hasSaved,
 }: Props) => {
   const pathname = usePathname();
-  const router = useRouter();
-  const handleSave = () => {};
+  // const router = useRouter();
+  const handleSave = async () => {
+    await toggleSaveQuestion({
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathname,
+    });
+  };
 
   const handleVote = async (action: string) => {
     // console.log("CLICK CLICK");
