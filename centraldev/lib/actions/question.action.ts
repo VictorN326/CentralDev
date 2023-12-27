@@ -8,6 +8,7 @@ import {
   CreateQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
+  QuestionVoteParams,
 } from "./shared.types";
 import User from "@/database/User.model";
 import { revalidatePath } from "next/cache";
@@ -82,5 +83,77 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
     return question;
   } catch (error) {
     console.log("DEBUG: Error getting question by id", error);
+  }
+}
+
+export async function upVoteQuestions(params: QuestionVoteParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasupVoted) {
+      updateQuery = { $pull: { upVotes: userId } };
+    } else if (hasdownVoted) {
+      updateQuery = {
+        $pull: { downVotes: userId },
+        $push: { upVotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { upVotes: userId } };
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    // Increment author's reputation for their contribution
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function downVoteQuestions(params: QuestionVoteParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId, hasupVoted, hasdownVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasdownVoted) {
+      updateQuery = { $pull: { downVotes: userId } };
+    } else if (hasupVoted) {
+      updateQuery = {
+        $pull: { upVotes: userId },
+        $push: { downVotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { downVotes: userId } };
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    // Increment author's reputation
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }

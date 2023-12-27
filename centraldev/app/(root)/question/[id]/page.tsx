@@ -13,7 +13,7 @@ import AllAnswer from "@/components/shared/AllAnswer";
 import Votes from "@/components/shared/Votes";
 const Page = async ({ params, searchParams }: any) => {
   const result = await getQuestionById({ questionId: params.id });
-
+  console.log("DEBUG: RESULT: ", result);
   const { userId: clerkId } = auth();
   let mongoDBUser;
   if (clerkId) {
@@ -39,7 +39,16 @@ const Page = async ({ params, searchParams }: any) => {
             </p>
           </Link>
           <div className="flex justify-end">
-            <Votes />
+            <Votes
+              type="Question"
+              itemId={JSON.stringify(result._id)}
+              userId={JSON.stringify(mongoDBUser._id)}
+              upVotes={result.upVotes.length}
+              hasupVoted={result.upVotes.includes(mongoDBUser._id)}
+              downVotes={result.downVotes.length}
+              hasdownVoted={result.downVotes.includes(mongoDBUser._id)}
+              hasSaved={mongoDBUser?.saved.includes(result._id)}
+            />
           </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
@@ -85,7 +94,7 @@ const Page = async ({ params, searchParams }: any) => {
       </div>
       <AllAnswer
         questionId={result._id}
-        userId={JSON.stringify(mongoDBUser._id)}
+        userId={mongoDBUser._id}
         totalAnswers={result.answers.length}
       />
       <Answer

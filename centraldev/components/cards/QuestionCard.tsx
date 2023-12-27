@@ -75,7 +75,7 @@ const QuestionCard = ({
           imgUrl="/assets/icons/message.svg"
           alt="message"
           value={formatNumber(answers.length)}
-          title="answers"
+          title={`${answers.length > 1 ? "Answers" : "Answer"} `}
           textStyles="small-medium text-dark400_light800"
         />
 
