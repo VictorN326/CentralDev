@@ -13,7 +13,7 @@ import AllAnswer from "@/components/shared/AllAnswer";
 import Votes from "@/components/shared/Votes";
 const Page = async ({ params, searchParams }: any) => {
   const result = await getQuestionById({ questionId: params.id });
-  console.log("DEBUG: RESULT: ", result);
+  // console.log("DEBUG: RESULT: ", result);
   const { userId: clerkId } = auth();
   let mongoDBUser;
   if (clerkId) {

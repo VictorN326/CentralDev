@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { formatNumber } from "@/lib/utils";
 import {
@@ -8,6 +8,8 @@ import {
 } from "@/lib/actions/question.action";
 import { upVoteAnswer, downVoteAnswer } from "@/lib/actions/answer.action";
 import { usePathname, useRouter } from "next/navigation";
+import { toggleSaveQuestion } from "@/lib/actions/user.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 interface Props {
   type: string;
   itemId: string;
@@ -30,7 +32,13 @@ const Votes = ({
 }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
-  const handleSave = () => {};
+  const handleSave = async () => {
+    await toggleSaveQuestion({
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathname,
+    });
+  };
 
   const handleVote = async (action: string) => {
     // console.log("CLICK CLICK");
@@ -38,7 +46,7 @@ const Votes = ({
       return;
     }
     if (action === "upvote") {
-      // console.log("DEBUG: hello upvote");
+      // console.log("DEBUG: hello upVote");
       if (type === "Question") {
         await upVoteQuestions({
           questionId: JSON.parse(itemId),
@@ -47,7 +55,7 @@ const Votes = ({
           hasdownVoted,
           path: pathname,
         });
-        // console.log("DEBUG: UPVOTE QUESTION");
+        // console.log("DEBUG: upVote QUESTION");
       } else if (type === "Answer") {
         await upVoteAnswer({
           answerId: JSON.parse(itemId),
@@ -62,7 +70,7 @@ const Votes = ({
     }
 
     if (action === "downvote") {
-      // console.log("DEBUG: Hello downvote");
+      // console.log("DEBUG: Hello downVote");
       if (type === "Question") {
         await downVoteQuestions({
           questionId: JSON.parse(itemId),
@@ -71,7 +79,7 @@ const Votes = ({
           hasdownVoted,
           path: pathname,
         });
-        // console.log("DEBUG: DOWNVOTE QUESTION");
+        // console.log("DEBUG: downVote QUESTION");
       } else if (type === "Answer") {
         await downVoteAnswer({
           answerId: JSON.parse(itemId),
@@ -85,10 +93,20 @@ const Votes = ({
       return;
     }
   };
+
+  // React StrictMode for now will make the mounting run twice in development
+  // but in production, it should only run and mount once so the views will update by one
+  useEffect(() => {
+    viewQuestion({
+      questionId: JSON.parse(itemId),
+      userId: userId ? JSON.parse(userId) : undefined,
+    });
+  }, [itemId, userId, pathname, router]);
+
   return (
     <div className="flex gap-5">
       <div className="flex-center gap-2.5">
-        {/* upvote div here */}
+        {/* upVote div here */}
         <div className="flex-center gap-1.5">
           <Image
             src={
@@ -108,7 +126,7 @@ const Votes = ({
             </p>
           </div>
         </div>
-        {/* downvote div here */}
+        {/* downVote div here */}
         <div className="flex-center gap-1.5">
           <Image
             src={
