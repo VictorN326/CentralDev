@@ -9,6 +9,8 @@ import { getJoinedDate } from "@/lib/utils";
 import Link from "next/link";
 import ProfileLink from "@/components/shared/ProfileLink";
 import Stats from "@/components/shared/Stats";
+import QuestionTab from "@/components/shared/QuestionTab";
+import AnswerTab from "@/components/shared/AnswerTab";
 const UserProfile = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });
@@ -72,19 +74,37 @@ const UserProfile = async ({ params, searchParams }: URLProps) => {
           </SignedIn>
         </div>
       </div>
-      <Stats />
+      {userInfo && userInfo.totalQuestions && userInfo.totalAnswers && (
+        <Stats
+          totalQuestions={userInfo?.totalQuestions}
+          totalAnswers={userInfo?.totalAnswers}
+        />
+      )}
+
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">
           <TabsList className="background-light800_dark400 min-h-[42px] p-1">
-            <TabsTrigger value="top posts" className="tab">
+            <TabsTrigger value="top-posts" className="tab">
               Top Posts
             </TabsTrigger>
             <TabsTrigger value="answers" className="tab">
               Answers
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="top-posts">POSTS</TabsContent>
-          <TabsContent value="answers">ANSWERS</TabsContent>
+          <TabsContent value="top-posts">
+            <QuestionTab
+              searchParams={searchParams}
+              userId={userInfo?.user._id}
+              clerkId={clerkId}
+            />
+          </TabsContent>
+          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+            <AnswerTab
+              searchParams={searchParams}
+              userId={userInfo?.user._id}
+              clerkId={clerkId}
+            />
+          </TabsContent>
         </Tabs>
       </div>
     </>

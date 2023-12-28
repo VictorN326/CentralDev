@@ -5,6 +5,7 @@ export default authMiddleware({
     "/",
     "/sign-up",
     "/sign-in",
+    "/ask-question",
     "/api/webhook",
     "question/:id",
     "/tags",
