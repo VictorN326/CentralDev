@@ -1,19 +1,22 @@
-import { URLProps } from "@/types";
-import React from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getUserInfo } from "@/lib/actions/user.action";
+import { URLProps } from "@/types";
 import { SignedIn, auth } from "@clerk/nextjs";
-import { getJoinedDate } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import React from "react";
+import { getJoinedDate } from "@/lib/utils";
 import ProfileLink from "@/components/shared/ProfileLink";
 import Stats from "@/components/shared/Stats";
 import QuestionTab from "@/components/shared/QuestionTab";
 import AnswerTab from "@/components/shared/AnswerTab";
-const UserProfile = async ({ params, searchParams }: URLProps) => {
+
+const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });
+
   return (
     <>
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
@@ -38,7 +41,7 @@ const UserProfile = async ({ params, searchParams }: URLProps) => {
               {userInfo?.user.portfolioWebsite && (
                 <ProfileLink
                   imgUrl="/assets/icons/link.svg"
-                  href={userInfo.user.portfolioWebsite}
+                  href={userInfo?.user.portfolioWebsite}
                   title="Portfolio"
                 />
               )}
@@ -49,11 +52,13 @@ const UserProfile = async ({ params, searchParams }: URLProps) => {
                   title={userInfo.user.location}
                 />
               )}
+
               <ProfileLink
                 imgUrl="/assets/icons/calendar.svg"
                 title={getJoinedDate(userInfo?.user.joinedAt)}
               />
             </div>
+
             {userInfo?.user.bio && (
               <p className="paragraph-regular text-dark400_light800 mt-8">
                 {userInfo.user.bio}
@@ -74,12 +79,13 @@ const UserProfile = async ({ params, searchParams }: URLProps) => {
           </SignedIn>
         </div>
       </div>
-      {userInfo && userInfo.totalQuestions && userInfo.totalAnswers && (
-        <Stats
-          totalQuestions={userInfo?.totalQuestions}
-          totalAnswers={userInfo?.totalAnswers}
-        />
-      )}
+
+      <Stats
+        //@ts-ignore
+        totalQuestions={userInfo.totalQuestions}
+        //@ts-ignore
+        totalAnswers={userInfo.totalAnswers}
+      />
 
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">
@@ -111,4 +117,4 @@ const UserProfile = async ({ params, searchParams }: URLProps) => {
   );
 };
 
-export default UserProfile;
+export default Page;
