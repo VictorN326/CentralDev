@@ -3,6 +3,8 @@ import Link from "next/link";
 import RenderTags from "../shared/Tags";
 import Metrics from "../shared/Metrics";
 import { getTimeStamp, formatNumber } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteActions from "../shared/EditDeleteActions";
 interface QuestionProps {
   _id: string;
   title: string;
@@ -14,6 +16,7 @@ interface QuestionProps {
     _id: string;
     name: string;
     picture: string;
+    clerkId: string;
   };
   upVotes: [string];
   answers: Array<Object>;
@@ -32,6 +35,7 @@ const QuestionCard = ({
   views,
   createdAt,
 }: QuestionProps) => {
+  const showEditButtons = clerkId && clerkId === author.clerkId;
   return (
     <div className="card-wrapper p-9 sm:px-11 rounded-[10px]">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -47,6 +51,11 @@ const QuestionCard = ({
           </Link>
         </div>
         {/* if signed in, add edit delete actions on the card */}
+        <SignedIn>
+          {showEditButtons && (
+            <EditDeleteActions type="Question" itemId={JSON.stringify(_id)} />
+          )}
+        </SignedIn>
       </div>
       {/* rendered tag div goes below */}
       <div className="mt-3.5 flex flex-wrap gap-2">
