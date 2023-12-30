@@ -201,3 +201,16 @@ export async function editQuestion(params: EditQuestionParams) {
     console.log("DEBUG: Error editing question", error);
   }
 }
+
+export async function getHotQuestions() {
+  try {
+    connectToDatabase();
+
+    const hotQuestions = await Question.find({})
+      .sort({ views: -1, upVotes: -1 })
+      .limit(5); //most views and upVotes on top
+    return hotQuestions;
+  } catch (error) {
+    console.log("DEBUG: Error getting hot questions: ", error);
+  }
+}
