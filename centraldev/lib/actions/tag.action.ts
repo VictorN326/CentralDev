@@ -34,14 +34,34 @@ export async function getTopTags(params: GetTopInteractedTagsParams) {
 export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDatabase();
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
+    let sortOptions = {};
+    switch (filter) {
+      case "popular":
+        sortOptions = { questionCount: -1 };
+        break;
+      case "recent":
+        sortOptions = { createdAt: -1 };
+        break;
+      case "name":
+        sortOptions = { name: 1 };
+        break;
+      case "old":
+        sortOptions = { createdAt: 1 };
+        break;
 
+      default:
+        break;
+    }
     const query: FilterQuery<typeof Tag> = {};
 
     if (searchQuery) {
       query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }];
     }
-    const tags = await Tag.find(query);
+    const tags = await Tag.find(query)
+      //added collation as extra to sort by case insensitive for the tag names
+      .collation({ locale: "en", strength: 2 })
+      .sort(sortOptions);
     return { tags };
   } catch (error) {
     console.log("DEBUG: getAllTags error: ", error);

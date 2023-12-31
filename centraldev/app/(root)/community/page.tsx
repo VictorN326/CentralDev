@@ -9,6 +9,7 @@ import { SearchParamsProps } from "@/types";
 const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUser({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
   return (
     <>
