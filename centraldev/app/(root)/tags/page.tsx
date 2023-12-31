@@ -6,8 +6,11 @@ import { getAllUser } from "@/lib/actions/user.action";
 import Link from "next/link";
 import NoResult from "@/components/shared/NoResult";
 import { getAllTags } from "@/lib/actions/tag.action";
-const CommunityPage = async () => {
-  const result = await getAllTags({});
+import { SearchParamsProps } from "@/types";
+const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
+  const result = await getAllTags({
+    searchQuery: searchParams.q,
+  });
   //   console.log(result?.tags);
   return (
     <>
