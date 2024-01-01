@@ -21,7 +21,10 @@ import { FilterQuery } from "mongoose";
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, page = 1, pageSize = 3 } = params;
+
+    // calculate the number of post to skip base on the page number and page size
+    const skipAmount = (page - 1) * pageSize;
     const query: FilterQuery<typeof Question> = {};
 
     if (searchQuery) {
@@ -50,8 +53,13 @@ export async function getQuestions(params: GetQuestionsParams) {
     const questions = await Question.find(query)
       .populate({ path: "tags", model: Tag }) // need to populate the tags reference to get the tag name or value
       .populate({ path: "author", model: User }) // need to populate the author reference to get the author's name or value
+      .skip(skipAmount)
+      .limit(pageSize)
       .sort(sortOptions);
-    return { questions };
+
+    const totalQuestions = await Question.countDocuments(query);
+    const isNext = totalQuestions > skipAmount + questions.length;
+    return { questions, isNext };
   } catch (error) {
     console.log("DEBUG: Error getting questions", error);
   }

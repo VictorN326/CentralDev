@@ -13,7 +13,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </section>
         <RightSidebar />
       </div>
-      Toaster Popup Here
+      {/* Toaster Popup Here */}
     </main>
   );
 };
