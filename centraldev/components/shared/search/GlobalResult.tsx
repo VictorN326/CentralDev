@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import GlobalFilters from "./GlobalFilters";
+import { globalSearch } from "@/lib/actions/global.action";
 const GlobalResult = () => {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -14,24 +15,41 @@ const GlobalResult = () => {
     { type: "user", id: 3, title: "Victor" },
   ]);
 
-  const global = searchParams.get("global");
-  const type = searchParams.get("type");
+  const global = searchParams.get("global") || "";
+  const type = searchParams.get("type") || "";
 
   useEffect(() => {
     const fetchResult = async () => {
       setResult([]);
       setIsLoading(true);
       try {
+        const res = await globalSearch({ query: global, type: type });
+        //@ts-ignore
+        setResult(JSON.parse(res));
       } catch (error) {
         console.log("DEBUG: error in GlobalResult: ", error);
       } finally {
         setIsLoading(false);
       }
     };
+    if (global) {
+      fetchResult();
+    }
   }, [global, type]);
 
   const renderLink = (type: string, id: string) => {
-    return "/";
+    switch (type) {
+      case "question":
+        return `/question/${id}`;
+      case "answer":
+        return `/question/${id}`;
+      case "user":
+        return `/profile/${id}`;
+      case "tag":
+        return `/tags/${id}`;
+      default:
+        return "/";
+    }
   };
   return (
     <div className="absolute top-full z-10 mt-3 w-full bg-light-800 py-5 shadow-sm dark:bg-dark-400 rounded-xl">
@@ -54,7 +72,7 @@ const GlobalResult = () => {
             {result.length > 0 ? (
               result.map((item: any, index: number) => (
                 <Link
-                  href={renderLink("type", "id")}
+                  href={renderLink(item.type, item.id)}
                   key={item.type + item.id + index}
                   className="flex w-full cursor-pointer items-start gap-3 px-5 py-2.5 hover:bg-light-700/50 dark:hover:bg-dark-500/50"
                 >
