@@ -11,6 +11,7 @@ import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
 import Interaction from "@/database/interaction.model";
+import User from "@/database/User.model";
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
@@ -19,11 +20,24 @@ export async function createAnswer(params: CreateAnswerParams) {
     const newAnswer = await Answer.create({ content, author, question });
     console.log("DEBUG: newAnswer: ", { newAnswer });
 
-    // Ad answer to question's array
+    // Add answer to question's array
 
-    await Question.findByIdAndUpdate(question, {
+    const questions = await Question.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     });
+
+    // Increment author's reputation for their contribution
+
+    await Interaction.create({
+      user: author,
+      action: "answer",
+      question,
+      answer: newAnswer._id,
+      tags: questions.tags,
+    });
+
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } });
+
     revalidatePath(path);
     //TODO: Add interaction for later usage of user reputation
   } catch (error) {
@@ -97,6 +111,13 @@ export async function upVoteAnswer(params: AnswerVoteParams) {
     }
 
     // Increment author's reputation for their contribution
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupVoted ? -2 : 2 },
+    });
+
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasupVoted ? -10 : 10 },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -133,7 +154,13 @@ export async function downVoteAnswer(params: AnswerVoteParams) {
     }
 
     // Increment author's reputation
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasdownVoted ? -2 : 2 },
+    });
 
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasdownVoted ? -10 : 10 },
+    });
     revalidatePath(path);
   } catch (error) {
     console.log(error);
