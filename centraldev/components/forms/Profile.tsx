@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {
@@ -18,7 +17,7 @@ import { useState } from "react";
 import { ProfileSchema } from "@/lib/validations";
 import { usePathname, useRouter } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
-
+import { toast } from "../ui/use-toast";
 interface Props {
   clerkId: string;
   user: string;
@@ -29,7 +28,6 @@ const Profile = ({ clerkId, user }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
@@ -56,9 +54,19 @@ const Profile = ({ clerkId, user }: Props) => {
         },
         path: pathname,
       });
-
       router.back();
+      toast({
+        title: "Profile updated successfully",
+        description: "Your profile has been updated successfully",
+        variant: "default",
+      });
     } catch (error) {
+      toast({
+        title: "Error updating profile",
+        description:
+          "There has been an error updating your profile. Please try again or refresh the page",
+        variant: "destructive",
+      });
       console.log(error);
     } finally {
       setIsSubmitting(false);

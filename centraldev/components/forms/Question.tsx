@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useTheme } from "@/context/ThemeProvider";
-
+import { toast } from "../ui/use-toast";
 // const typeOfForm: any = "create";
 
 interface Props {
@@ -66,6 +66,11 @@ const Question = ({ mongodbUserId, type, questionDetails }: Props) => {
           content: values.explanation,
           path: pathname,
         });
+        toast({
+          title: "Question Edited",
+          description: "Question Edited Successfully",
+          variant: "default",
+        });
         router.push(`/question/${parsedQuestionDetails._id}`);
       } else {
         // make an async call to API or database to create question
@@ -77,10 +82,20 @@ const Question = ({ mongodbUserId, type, questionDetails }: Props) => {
 
           path: pathname,
         });
+        toast({
+          title: "Question Created",
+          description: "Question Created Successfully",
+          variant: "default",
+        });
         router.push("/");
       }
     } catch (error) {
       console.log("DEBUG: Error creating question", error);
+      toast({
+        title: "Error Creating Question",
+        description: "Error Creating Question. Please refresh and try again",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }

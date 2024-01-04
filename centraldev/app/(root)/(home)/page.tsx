@@ -9,6 +9,7 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
+import Loading from "./loading";
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
@@ -18,6 +19,10 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   });
 
   // console.log("DEBUG: result: ", result?.questions);
+
+  // const isLoading = true;
+
+  // if (isLoading) return <Loading />;
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">

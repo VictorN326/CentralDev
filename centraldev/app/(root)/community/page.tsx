@@ -7,12 +7,16 @@ import UserCard from "@/components/cards/UserCard";
 import Link from "next/link";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
+import Loading from "./loading";
 const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUser({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
     page: searchParams.page ? +searchParams.page : 1,
   });
+
+  // const isLoading = true;
+  // if (isLoading) return <Loading />;
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Users</h1>

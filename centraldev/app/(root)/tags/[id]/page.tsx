@@ -6,6 +6,7 @@ import LocalSearchBar from "@/components/shared/search/LocalSearchbar";
 import { IQuestion } from "@/database/question.model";
 import Pagination from "@/components/shared/Pagination";
 import { URLProps } from "@/types";
+import Loading from "./loading";
 const TagDetails = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsByTagId({
     tagId: params.id,
@@ -14,6 +15,9 @@ const TagDetails = async ({ params, searchParams }: URLProps) => {
   });
 
   // console.log("DEBUG: result: ", result);
+
+  // const isLoading = true;
+  // if (isLoading) return <Loading />;
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">{result?.tagTitle}</h1>

@@ -18,7 +18,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { usePathname } from "next/navigation";
-
+import { toast } from "../ui/use-toast";
 interface Props {
   question: string;
   questionId: string;
@@ -47,6 +47,10 @@ const Answer = ({ question, questionId, authorId }: Props) => {
         question: JSON.parse(questionId),
         path: pathname,
       });
+      toast({
+        title: "Answer Created",
+        description: "Answer Created Successfully",
+      });
       form.reset();
 
       if (editorRef.current) {
@@ -55,6 +59,11 @@ const Answer = ({ question, questionId, authorId }: Props) => {
         editor.setContent("");
       }
     } catch (error) {
+      toast({
+        title: "Error Creating Answer",
+        description: "Error Creating Answer",
+        variant: "destructive",
+      });
       console.log("DEBUG: Error creating answer in Answer.tsx: ", error);
     } finally {
       setIsSubmitting(false);
@@ -87,8 +96,10 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 
         editor.setContent(formattedAnswer);
       }
-
-      //TODO: Add toast notification here later
+      toast({
+        title: "AI Answer Generated",
+        description: "AI Answer Generated Successfully",
+      });
     } catch (error) {
       console.log("DEBUG: Error generating AI answer in Answer.tsx: ", error);
     } finally {

@@ -10,6 +10,7 @@ import { upVoteAnswer, downVoteAnswer } from "@/lib/actions/answer.action";
 import { usePathname, useRouter } from "next/navigation";
 import { toggleSaveQuestion } from "@/lib/actions/user.action";
 import { viewQuestion } from "@/lib/actions/interaction.action";
+import { toast } from "../ui/use-toast";
 interface Props {
   type: string;
   itemId: string;
@@ -42,12 +43,22 @@ const Votes = ({
       questionId: JSON.parse(itemId),
       path: pathname,
     });
+
+    return toast({
+      title: `Question ${
+        !hasSaved ? "Saved In" : "Removed from"
+      } your collection`,
+      variant: !hasSaved ? "default" : "destructive",
+    });
   };
 
   const handleVote = async (action: string) => {
     // console.log("CLICK CLICK");
     if (!userId) {
-      return;
+      return toast({
+        title: "Please log in to vote",
+        description: "You need to be logged in to vote",
+      });
     }
     if (action === "upvote") {
       // console.log("DEBUG: hello upVote");
@@ -69,8 +80,11 @@ const Votes = ({
           path: pathname,
         });
       }
-      //TODO: show a toast message later
-      return;
+
+      return toast({
+        title: `UpVote ${!hasupVoted ? "Successfully" : "Removed"}`,
+        variant: !hasupVoted ? "default" : "destructive",
+      });
     }
 
     if (action === "downvote") {
@@ -93,8 +107,10 @@ const Votes = ({
           path: pathname,
         });
       }
-      //TODO: show a toast message later
-      return;
+      return toast({
+        title: `DownVote ${!hasdownVoted ? "Successfully" : "Removed"}`,
+        variant: !hasdownVoted ? "default" : "destructive",
+      });
     }
   };
 

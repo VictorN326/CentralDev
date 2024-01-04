@@ -12,10 +12,13 @@ import ProfileLink from "@/components/shared/ProfileLink";
 import Stats from "@/components/shared/Stats";
 import QuestionTab from "@/components/shared/QuestionTab";
 import AnswerTab from "@/components/shared/AnswerTab";
-
+import Loading from "./loading";
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });
+
+  // const isLoading = true;
+  // if (isLoading) return <Loading />;
   return (
     <>
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">

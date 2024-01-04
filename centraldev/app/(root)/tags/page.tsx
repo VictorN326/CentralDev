@@ -7,6 +7,7 @@ import NoResult from "@/components/shared/NoResult";
 import { getAllTags } from "@/lib/actions/tag.action";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
+import Loading from "./loading";
 const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllTags({
     searchQuery: searchParams.q,
@@ -14,6 +15,10 @@ const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
     page: searchParams.page ? +searchParams.page : 1,
   });
   //   console.log(result?.tags);
+
+  // const isLoading = true;
+
+  // if (isLoading) return <Loading />;
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Tags</h1>
