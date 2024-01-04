@@ -8,6 +8,12 @@ import { auth } from "@clerk/nextjs";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import Loading from "./loading";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Collection | CentralDev",
+  description:
+    "View the collections of questions you have saved and get back to them anytime.",
+};
 export default async function Collection({ searchParams }: SearchParamsProps) {
   const { userId } = auth();
 

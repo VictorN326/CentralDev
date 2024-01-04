@@ -10,7 +10,13 @@ import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import Loading from "./loading";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Home | CentralDev",
+  description:
+    "CentralDev is a community of developers, designers, and programmers. We are a community of learners and we help each other to learn and grow.",
+};
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
     searchQuery: searchParams.q,

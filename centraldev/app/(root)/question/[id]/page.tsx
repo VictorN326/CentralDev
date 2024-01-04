@@ -11,6 +11,12 @@ import React from "react";
 import { getUserById } from "@/lib/actions/user.action";
 import AllAnswer from "@/components/shared/AllAnswer";
 import Votes from "@/components/shared/Votes";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Question | CentralDev",
+  description:
+    "View the question and answers. You can also answer the question and help others and upVote and downVote the question and answers.",
+};
 const Page = async ({ params, searchParams }: any) => {
   const result = await getQuestionById({ questionId: params.id });
   // console.log("DEBUG: RESULT: ", result);

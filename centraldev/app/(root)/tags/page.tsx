@@ -8,6 +8,12 @@ import { getAllTags } from "@/lib/actions/tag.action";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import Loading from "./loading";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Tags | CentralDev",
+  description:
+    "View all the tags that are related to the questions in the community. You can also search for tags and filter them.",
+};
 const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllTags({
     searchQuery: searchParams.q,

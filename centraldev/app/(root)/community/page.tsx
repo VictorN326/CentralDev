@@ -8,6 +8,12 @@ import Link from "next/link";
 import { SearchParamsProps } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import Loading from "./loading";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Community | CentralDev",
+  description:
+    "View all the users in the community that are helping each other to learn and grow. Connect with them and grow together.",
+};
 const CommunityPage = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUser({
     searchQuery: searchParams.q,

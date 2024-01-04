@@ -13,6 +13,12 @@ import Stats from "@/components/shared/Stats";
 import QuestionTab from "@/components/shared/QuestionTab";
 import AnswerTab from "@/components/shared/AnswerTab";
 import Loading from "./loading";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Profile | CentralDev",
+  description:
+    "Checkout your own profile and see how much you have contributed to the community. You can also edit your profile for more customization",
+};
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const userInfo = await getUserInfo({ userId: params.id });

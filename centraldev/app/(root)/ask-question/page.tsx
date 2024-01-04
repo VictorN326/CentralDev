@@ -3,6 +3,12 @@ import Question from "@/components/forms/Question";
 import { redirect } from "next/navigation";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Ask a question | CentralDev",
+  description:
+    "Ask a question to the community and get answers from the amazing minds. You can also help others by answering their questions.",
+};
 const page = async () => {
   const { userId } = auth();
 

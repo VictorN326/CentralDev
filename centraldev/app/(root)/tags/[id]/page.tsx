@@ -7,6 +7,12 @@ import { IQuestion } from "@/database/question.model";
 import Pagination from "@/components/shared/Pagination";
 import { URLProps } from "@/types";
 import Loading from "./loading";
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Tag Details | CentralDev",
+  description:
+    "View all the questions that are related to the tag. You can also search for questions",
+};
 const TagDetails = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsByTagId({
     tagId: params.id,
