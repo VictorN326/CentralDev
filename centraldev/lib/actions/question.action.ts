@@ -21,7 +21,7 @@ import { RecommendedParams } from "./shared.types";
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
-    const { searchQuery, filter, page = 1, pageSize = 3 } = params;
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
 
     // calculate the number of post to skip base on the page number and page size
     const skipAmount = (page - 1) * pageSize;

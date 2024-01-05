@@ -76,8 +76,7 @@ export async function getAllTags(params: GetAllTagsParams) {
 export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
   try {
     connectToDatabase();
-    //TODO: add pagination later for the pages
-    const { tagId, page = 1, pageSize = 1, searchQuery } = params;
+    const { tagId, page = 1, pageSize = 5, searchQuery } = params;
 
     const skipAmount = (page - 1) * pageSize;
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
